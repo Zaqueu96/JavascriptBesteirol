@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+        <style type="text/css">
+        #container {
+            background-color:#ccc;
+            width:50%;
+            min-width: 500px;
+            min-height: 500px;
+            height: 50%;
+            display: flex;
+            
+        }
+        .boolRed {
+            position: absolute;
+            width:15px;
+            height: 15px;
+            border-radius:10px;
+            background-color: red;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+        </div>
+    
+        <script type="text/javascript">
+            var container = document.getElementById('container');
+            function newBool(x,y){
+                var newDiv = document.createElement('div');
+                newDiv.className = 'boolRed';
+                newDiv.style=`top:${y}px;left:${x}px;`
+                container.append(newDiv);
+            }
+            // newBool(10,10)
+        container.addEventListener('mousemove',function(evt){
+            const {clientX,clientY} =evt;
+            console.log(evt)
+            newBool(clientX,clientY);
+        });
+        </script>
+    </body>
+</html>

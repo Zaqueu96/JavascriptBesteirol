@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+    <style type="text/css">
+        #container {
+            background-color: #ccc;
+            width: 50%;
+            min-width: 500px;
+            min-height: 500px;
+            height: 50%;
+            display: flex;
+
+        }
+
+        .boolRed {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 10px;
+            background-color: red;
+        }
+
+        .boolBlack {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 10px;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+    </div>
+    <button type="" onclick="initBallBlack()">Iniciar Attack</button>
+    <button type="" onclick="stop()">Iniciar Attack</button>
+    <script type="text/javascript">
+        /** VARIABLES REQUIRED */
+
+        var container = document.getElementById('container');
+        var controlMove = 'rigth';
+        /**FUNCTION CREATE NEW BOOL*/
+        function newBool(x, y, isBlack = false) {
+            var newDiv = document.createElement('div');
+            newDiv.className = isBlack ? 'boolBlack' : 'boolRed';
+            newDiv.style = `top:${y}px;left:${x}px;`
+            newDiv.id = `${Math.round(Math.random() * 9999)}`
+            container.append(newDiv);
+        }
+
+        /* Create Two Objects*/
+        newBool(105, 45)
+        newBool(50, 145, true)
+
+        /* Controll Red Ball*/
+        function controlRedBall(redBall) {
+            // console.log('redBall',redBall);
+            console.log('controlMove', controlMove)
+            var { offsetLeft: x, offsetTop: y } = redBall;
+            if (['top','bottom'].includes(controlMove)) {
+                var n = controlMove == 'top' ? y - 1 : y + 1;
+                redBall.style.top = `${n}px`;
+                console.log('n',n)
+                return;
+            }
+            if (['left','rigth'].includes(controlMove)) {
+                var n = controlMove == 'left' ? x - 1 : x + 1;
+                redBall.style.left = `${n}px`;
+                console.log('n',n)
+                return;
+            }
+        }
+
+        /** Adding Event Controller BollRed **/
+        window.addEventListener('keypress', function (evt) {
+            const { code } = evt;
+            console.log(code);
+            switch (code) {
+                case 'KeyW':
+                    controlMove = 'top';
+                    break;
+                case 'KeyA':
+                    controlMove = 'left';
+                    break;
+                case 'KeyD':
+                    controlMove = 'rigth';
+                    break;
+                case 'KeyS':
+                    controlMove = 'bottom';
+                    break;
+                default:
+                    break;
+            }
+            // newBool(clientX,clientY);
+        });
+
+        /** Init Attack Bool*/
+        function initBallBlack() {
+            const game = setInterval(function () {
+                var redBalls = document.querySelectorAll('.boolRed');
+                var blackBalls = document.querySelectorAll('.boolBlack')
+                if (redBalls.length === 0) {
+                    // alert("End Gamer");
+                    clearInterval(this);
+                    return false;
+                };
+                var { offsetLeft: xR, offsetTop: yR } = redBalls.item(0);
+                var { offsetLeft: xB, offsetTop: yB } = blackBalls.item(0);
+                const setB = (x = null, y = null) => {
+                    if (x) blackBalls.item(0).style.left = `${x}px`;
+                    if (y) blackBalls.item(0).style.top = `${y}px`;
+                    // console.log('x', x, 'y', y)
+                }
+                if (xR > xB) {
+                    xB++;
+                    setB(xB);
+                    return;
+                }
+                if (xB > xR) {
+                    xB--;
+                    setB(xB);
+                    return;
+                }
+                if (yR > yB) {
+                    yB++;
+                    setB(false, yB);
+                    return;
+                }
+                if (yR < yB) {
+                    yB--;
+                    setB(false, yB);
+                    return;
+                }
+                if (yB === yR && xB === xR) {
+                    redBalls.item(0).hidden = true;
+                    redBalls.item(0).remove();
+                }
+                // console.log(offsetLeft, offsetTop);
+            }, 10);
+
+            const EndGame = () => {
+                clearInterval(game);
+                alert("End Gamer");
+            }
+        }
+
+        // attackBlack();
+
+        /** Adding Event Click **/
+        container.addEventListener('click',function(evt){
+            const {clientX,clientY} =evt;
+            console.log(evt)
+            newBool(clientX,clientY);
+        });
+
+
+        /** Start Game **/
+        // initBallBlack();
+
+
+    </script>
+</body>
+
+</html>
